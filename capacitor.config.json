@@ -1,0 +1,10 @@
+{
+  "appId": "com.frigosmart.app",
+  "appName": "Frigo Smart AI",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "ios": {
+    "contentInset": "automatic",
+    "backgroundColor": "#0f172a"
+  }
+}
