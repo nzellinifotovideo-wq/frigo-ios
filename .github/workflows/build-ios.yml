@@ -50,14 +50,17 @@ jobs:
             -derivedDataPath build \
             build
       
-      - name: Create ZIP for Appetize
+      - name: Find and ZIP App
         run: |
-          cd ios/App/build/Build/Products/Release-iphonesimulator
-          zip -r ../../../../../App-Simulator.zip App.app
+          find ios -name "*.app" -type d
+          APP_PATH=$(find ios -name "App.app" -type d | head -1)
+          echo "Found app at: $APP_PATH"
+          cd $(dirname "$APP_PATH")
+          zip -r $GITHUB_WORKSPACE/App-Simulator.zip App.app
       
       - name: Upload Simulator App
         uses: actions/upload-artifact@v4
         with:
           name: ios-simulator-app
-          path: ios/App/App-Simulator.zip
+          path: App-Simulator.zip
           retention-days: 7
