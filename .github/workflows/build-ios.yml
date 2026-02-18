@@ -18,6 +18,18 @@ jobs:
         with:
           node-version: '18'
       
+      - name: Create www folder
+        run: |
+          mkdir -p www
+          cp -r index.html www/
+          cp -r manifest.json www/ 2>/dev/null || true
+          cp -r service-worker.js www/ 2>/dev/null || true
+          cp -r icons www/ 2>/dev/null || true
+          cp -r images www/ 2>/dev/null || true
+          cp -r favicon.ico www/ 2>/dev/null || true
+          cp -r *.css www/ 2>/dev/null || true
+          cp -r *.js www/ 2>/dev/null || true
+      
       - name: Install dependencies
         run: npm install
       
