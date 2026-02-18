@@ -1,0 +1,51 @@
+name: Build iOS App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Add iOS platform
+        run: npx cap add ios
+      
+      - name: Sync Capacitor
+        run: npx cap sync ios
+      
+      - name: Build iOS Simulator App
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+            -derivedDataPath build \
+            build
+      
+      - name: Create ZIP for Appetize
+        run: |
+          cd ios/App/build/Build/Products/Release-iphonesimulator
+          zip -r ../../../../../App-Simulator.zip App.app
+      
+      - name: Upload Simulator App
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-app
+          path: ios/App/App-Simulator.zip
+          retention-days: 7
